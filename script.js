@@ -34,8 +34,8 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3", // refrain pendant le défilement des photos
-  musique: "audio/parapluie.mp3", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261112b", // refrain pendant le défilement des photos
+  musique: "audio/parapluie.mp3?v=20261112b", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre

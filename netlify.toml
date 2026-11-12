@@ -10,27 +10,5 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=3600"
-
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=3600"
-
-[[headers]]
-  for = "/photos/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/audio/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/videos/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
+# Pas de mise en cache longue : chaque visite vérifie si un fichier a changé
+# (Netlify répond « inchangé » très vite grâce aux ETag).
