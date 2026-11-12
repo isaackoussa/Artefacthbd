@@ -9,12 +9,12 @@ const CONFIG = {
   badge: "LMA",
 
   // 📸 Photos du diaporama d'entrée : mets les fichiers dans le dossier "photos/"
-  // et écris leur nom ici, dans l'ordre. La légende est facultative.
+  // et écris leur nom ici, dans l'ordre.
   photos: [
-    // { src: "photos/1.jpg", legende: "Ma Flora 🤍" },
-    // { src: "photos/2.jpg", legende: "Toujours souriante ✨" },
+    // { src: "photos/1.jpg" },
+    // { src: "photos/2.jpg" },
   ],
-  dureePhoto: 1800, // millisecondes par photo
+  dureePhoto: 1500, // défilement automatique : 1,5 seconde par photo
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -155,11 +155,11 @@ function showMain() {
 
 // Photos d'attente tant que les vraies ne sont pas ajoutées
 const PLACEHOLDERS = [
-  { emoji: "🤍", legende: `${prenom}…` },
-  { emoji: "🌸", legende: "Une femme battante" },
-  { emoji: "🦁", legende: "Courageuse" },
-  { emoji: "🌟", legende: "Inspirante" },
-  { emoji: "🎂", legende: "Joyeux anniversaire !" },
+  { emoji: "🤍" },
+  { emoji: "🌸" },
+  { emoji: "🦁" },
+  { emoji: "🌟" },
+  { emoji: "🎂" },
 ];
 
 function runSlideshow() {
