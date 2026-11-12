@@ -202,11 +202,11 @@ function switchToMainMusic() {
   if (!introTrack || !mainTrack || music === mainTrack) return;
   const old = introTrack;
   music = mainTrack;
-  fade(old, old.volume, 0, 600, () => { old.pause(); });
+  fade(old, old.volume, 0, 250, () => { old.pause(); }); // le refrain s'arrête à la fin de la dernière photo
   if (userMuted) return setMusicIcon();
   mainTrack.currentTime = 0;
   mainTrack.volume = 0;
-  mainTrack.play().then(() => { musicBtn.hidden = false; fade(mainTrack, 0, 1, 900); }).catch(() => {});
+  mainTrack.play().then(() => { musicBtn.hidden = false; fade(mainTrack, 0, 1, 400); }).catch(() => {});
 }
 
 musicBtn.addEventListener("click", () => {
