@@ -14,7 +14,7 @@ const CONFIG = {
     // { src: "photos/1.jpg" },
     // { src: "photos/2.jpg" },
   ],
-  dureePhoto: 900, // défilement automatique : 0,9 seconde par photo
+  dureePhoto: 600, // défilement automatique : 0,6 seconde par photo
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -85,7 +85,7 @@ function burst(x = innerWidth / 2, y = innerHeight / 2, count = 160) {
   if (reduceMotion) return;
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 4 + Math.random() * 9;
+    const speed = 6 + Math.random() * 11;
     const isHeart = Math.random() < 0.25;
     pieces.push({
       x, y,
@@ -96,7 +96,7 @@ function burst(x = innerWidth / 2, y = innerHeight / 2, count = 160) {
       rot: Math.random() * Math.PI,
       vr: (Math.random() - 0.5) * 0.3,
       life: 0,
-      maxLife: 120 + Math.random() * 80,
+      maxLife: 75 + Math.random() * 45,
       heart: isHeart,
     });
   }
@@ -116,7 +116,7 @@ function tick() {
   pieces = pieces.filter((p) => p.life < p.maxLife && p.y < innerHeight + 40);
   for (const p of pieces) {
     p.life++;
-    p.vy += 0.22;
+    p.vy += 0.38;
     p.vx *= 0.985;
     p.x += p.vx;
     p.y += p.vy;
@@ -147,10 +147,10 @@ function showMain() {
   if (!main.hidden) return;
   main.hidden = false;
   slideshow.classList.add("hide");
-  setTimeout(() => (slideshow.hidden = true), 800);
+  setTimeout(() => (slideshow.hidden = true), 400);
   window.scrollTo(0, 0);
   burst(innerWidth / 2, innerHeight / 3, 200);
-  setTimeout(() => rain(2200), 300);
+  setTimeout(() => rain(1500), 150);
 }
 
 // Photos d'attente tant que les vraies ne sont pas ajoutées
@@ -204,7 +204,7 @@ function runSlideshow() {
     slide.appendChild(label);
     stage.appendChild(slide);
     requestAnimationFrame(() => requestAnimationFrame(() => slide.classList.add("in")));
-    if (prev) { const p = prev; p.classList.add("out"); setTimeout(() => p.remove(), 450); }
+    if (prev) { const p = prev; p.classList.add("out"); setTimeout(() => p.remove(), 300); }
     prev = slide;
     bars.forEach((b, k) => b.classList.toggle("on", k <= i));
     burst(innerWidth / 2, innerHeight / 2, 18);
@@ -218,7 +218,7 @@ document.getElementById("openGift").addEventListener("click", (e) => {
   e.currentTarget.disabled = true; // évite de lancer le diaporama deux fois
   burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 220);
   intro.classList.add("hide");
-  setTimeout(() => intro.remove(), 900);
+  setTimeout(() => intro.remove(), 450);
   runSlideshow();
 }, { once: true });
 
@@ -258,7 +258,7 @@ const letterObs = new IntersectionObserver((entries) => {
     let i = 0;
     (function type() {
       letter.textContent = chars.slice(0, ++i).join("");
-      if (i < chars.length) setTimeout(type, chars[i - 1] === "\n" ? 250 : 28);
+      if (i < chars.length) setTimeout(type, chars[i - 1] === "\n" ? 120 : 14);
       else letter.classList.remove("typing");
     })();
   }
