@@ -15,6 +15,7 @@ const CONFIG = {
     // { src: "photos/2.jpg", legende: "Toujours souriante ✨" },
   ],
   dureePhoto: 1800, // millisecondes par photo
+  textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
   message:
@@ -192,7 +193,7 @@ function runSlideshow() {
     slide.appendChild(img);
     const label = document.createElement("div");
     label.className = "slide-label";
-    label.textContent = prenom + " 🤍";
+    label.textContent = CONFIG.textePhoto;
     slide.appendChild(label);
     stage.appendChild(slide);
     requestAnimationFrame(() => requestAnimationFrame(() => slide.classList.add("in")));
