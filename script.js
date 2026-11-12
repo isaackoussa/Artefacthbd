@@ -34,8 +34,8 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261112b", // refrain pendant le défilement des photos
-  musique: "audio/parapluie.mp3?v=20261112b", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261112c", // refrain pendant le défilement des photos
+  musique: "audio/parapluie.mp3?v=20261112c", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -297,22 +297,6 @@ document.getElementById("openGift").addEventListener("click", (e) => {
   setTimeout(() => intro.remove(), 450);
   runSlideshow();
 }, { once: true });
-
-/* ---------- Vidéos : une seule à la fois ---------- */
-const videos = document.querySelectorAll(".video-card video");
-// La musique se met en pause pendant une vidéo et reprend après
-let musicWasPlaying = false;
-videos.forEach((v) => {
-  v.addEventListener("play", () => {
-    videos.forEach((o) => { if (o !== v) o.pause(); });
-    if (!music.paused) { musicWasPlaying = true; music.pause(); }
-  });
-  const resume = () => {
-    if (musicWasPlaying && !userMuted && [...videos].every((o) => o.paused)) { musicWasPlaying = false; music.play().catch(() => {}); }
-  };
-  v.addEventListener("pause", resume);
-  v.addEventListener("ended", resume);
-});
 
 /* ---------- Bénédictions ---------- */
 const blessingList = document.getElementById("blessingList");
