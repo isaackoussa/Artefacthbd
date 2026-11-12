@@ -14,7 +14,7 @@ const CONFIG = {
     // { src: "photos/1.jpg" },
     // { src: "photos/2.jpg" },
   ],
-  dureePhoto: 1500, // défilement automatique : 1,5 seconde par photo
+  dureePhoto: 900, // défilement automatique : 0,9 seconde par photo
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -162,10 +162,17 @@ const PLACEHOLDERS = [
   { emoji: "🎂" },
 ];
 
+// Précharge les photos dès l'arrivée sur la page pour qu'elles s'affichent sans délai
+const preloaded = CONFIG.photos.map((ph) => {
+  const im = new Image();
+  im.decoding = "async";
+  im.src = ph.src;
+  return im;
+});
+
 function runSlideshow() {
   const list = CONFIG.photos.length ? CONFIG.photos : PLACEHOLDERS;
   const stage = document.getElementById("slideStage");
-  const caption = document.getElementById("slideCaption");
   const progress = document.getElementById("slideProgress");
   progress.innerHTML = list.map(() => "<span></span>").join("");
   const bars = progress.querySelectorAll("span");
@@ -182,11 +189,11 @@ function runSlideshow() {
     const img = document.createElement("div");
     img.className = "slide-img";
     if (item.src) {
-      const im = new Image();
-      im.alt = item.legende || prenom;
-      im.src = item.src;
-      im.onerror = () => (img.innerHTML = '<div class="slide-placeholder">🤍</div>');
-      img.appendChild(im);
+      const im = preloaded[i].cloneNode();
+      im.alt = prenom;
+      const fail = () => (img.innerHTML = '<div class="slide-placeholder">🤍</div>');
+      if (preloaded[i].complete && !preloaded[i].naturalWidth) fail();
+      else { im.onerror = fail; img.appendChild(im); }
     } else {
       img.innerHTML = `<div class="slide-placeholder"><div>${item.emoji}<small>Photo bientôt 📸</small></div></div>`;
     }
@@ -197,9 +204,8 @@ function runSlideshow() {
     slide.appendChild(label);
     stage.appendChild(slide);
     requestAnimationFrame(() => requestAnimationFrame(() => slide.classList.add("in")));
-    if (prev) { const p = prev; p.classList.add("out"); setTimeout(() => p.remove(), 600); }
+    if (prev) { const p = prev; p.classList.add("out"); setTimeout(() => p.remove(), 450); }
     prev = slide;
-    caption.textContent = item.legende || "";
     bars.forEach((b, k) => b.classList.toggle("on", k <= i));
     burst(innerWidth / 2, innerHeight / 2, 18);
     i++;
@@ -209,11 +215,12 @@ function runSlideshow() {
 
 
 document.getElementById("openGift").addEventListener("click", (e) => {
+  e.currentTarget.disabled = true; // évite de lancer le diaporama deux fois
   burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 220);
   intro.classList.add("hide");
   setTimeout(() => intro.remove(), 900);
   runSlideshow();
-});
+}, { once: true });
 
 /* ---------- Bénédictions ---------- */
 const blessingList = document.getElementById("blessingList");
@@ -279,7 +286,7 @@ blowBtn.addEventListener("click", () => {
 
 /* ---------- Bouton confettis ---------- */
 document.getElementById("party").addEventListener("click", (e) => {
-  burst(e.clientX, e.clientY, 200);
+  burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 200);
   rain(2000);
 });
 

@@ -20,8 +20,7 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-# Toute URL inconnue renvoie vers la page d'anniversaire
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[headers]]
+  for = "/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

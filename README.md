@@ -30,5 +30,6 @@ Astuce : tu peux aussi mettre le prénom dans le lien → `https://ton-site.netl
 | `index.html` | Structure de la page |
 | `style.css` | Couleurs et animations |
 | `script.js` | Confettis, emojis flottants, lettre, bougies + **personnalisation** |
-| `netlify.toml` / `_redirects` | Configuration Netlify |
+| `netlify.toml` | Configuration Netlify |
+| `photos/` | Les photos du diaporama |
 | `favicon.svg` | Petite icône 🤍 de l'onglet |
