@@ -30,7 +30,11 @@ const CONFIG = {
     { src: "photos/17.jpg" },
     { src: "photos/18.jpg" },
   ],
-  dureePhoto: 600, // défilement automatique : 0,6 seconde par photo
+  dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
+  dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
+
+  // 🎵 Musique lancée à l'ouverture du cadeau (mets le fichier dans le dossier "audio/")
+  musique: "audio/parapluie.mp3",
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -147,6 +151,30 @@ function tick() {
   else { running = false; ctx.clearRect(0, 0, innerWidth, innerHeight); }
 }
 
+/* ---------- Musique ---------- */
+const music = new Audio();
+music.loop = true;
+music.preload = "auto";
+music.volume = 0.8;
+const musicBtn = document.getElementById("musicBtn");
+let musicOk = false;
+if (CONFIG.musique) {
+  music.src = CONFIG.musique;
+  music.addEventListener("canplay", () => (musicOk = true), { once: true });
+  music.addEventListener("error", () => { musicOk = false; musicBtn.hidden = true; });
+}
+function setMusicIcon() { musicBtn.textContent = music.paused ? "🔇" : "🔊"; }
+function startMusic() {
+  if (!CONFIG.musique) return;
+  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
+}
+musicBtn.addEventListener("click", () => {
+  music.paused ? music.play().catch(() => {}) : music.pause();
+  setMusicIcon();
+});
+music.addEventListener("play", setMusicIcon);
+music.addEventListener("pause", setMusicIcon);
+
 /* ---------- Ouverture du cadeau → diaporama → page ---------- */
 const intro = document.getElementById("intro");
 const main = document.getElementById("main");
@@ -227,13 +255,14 @@ function runSlideshow() {
     prev = slide;
     bars.forEach((b, k) => b.classList.toggle("on", k <= i));
     i++;
-    setTimeout(next, CONFIG.dureePhoto);
+    setTimeout(next, i === list.length ? CONFIG.dureeDernierePhoto : CONFIG.dureePhoto);
   })();
 }
 
 
 document.getElementById("openGift").addEventListener("click", (e) => {
   e.currentTarget.disabled = true; // évite de lancer le diaporama deux fois
+  startMusic();
   burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 90);
   intro.classList.add("hide");
   setTimeout(() => intro.remove(), 450);
@@ -242,9 +271,19 @@ document.getElementById("openGift").addEventListener("click", (e) => {
 
 /* ---------- Vidéos : une seule à la fois ---------- */
 const videos = document.querySelectorAll(".video-card video");
-videos.forEach((v) => v.addEventListener("play", () => {
-  videos.forEach((o) => { if (o !== v) o.pause(); });
-}));
+// La musique se met en pause pendant une vidéo et reprend après
+let musicWasPlaying = false;
+videos.forEach((v) => {
+  v.addEventListener("play", () => {
+    videos.forEach((o) => { if (o !== v) o.pause(); });
+    if (!music.paused) { musicWasPlaying = true; music.pause(); }
+  });
+  const resume = () => {
+    if (musicWasPlaying && [...videos].every((o) => o.paused)) { musicWasPlaying = false; music.play().catch(() => {}); }
+  };
+  v.addEventListener("pause", resume);
+  v.addEventListener("ended", resume);
+});
 
 /* ---------- Bénédictions ---------- */
 const blessingList = document.getElementById("blessingList");

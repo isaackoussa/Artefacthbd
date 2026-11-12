@@ -1,0 +1,2 @@
+Mets ici le fichier de la musique, nommé exactement : parapluie.mp3
+Il se lancera automatiquement à l'ouverture du cadeau.
