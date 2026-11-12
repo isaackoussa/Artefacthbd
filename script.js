@@ -11,8 +11,24 @@ const CONFIG = {
   // 📸 Photos du diaporama d'entrée : mets les fichiers dans le dossier "photos/"
   // et écris leur nom ici, dans l'ordre.
   photos: [
-    // { src: "photos/1.jpg" },
-    // { src: "photos/2.jpg" },
+    { src: "photos/01.jpg" },
+    { src: "photos/02.jpg" },
+    { src: "photos/03.jpg" },
+    { src: "photos/04.jpg" },
+    { src: "photos/05.jpg" },
+    { src: "photos/06.jpg" },
+    { src: "photos/07.jpg" },
+    { src: "photos/08.jpg" },
+    { src: "photos/09.jpg" },
+    { src: "photos/10.jpg" },
+    { src: "photos/11.jpg" },
+    { src: "photos/12.jpg" },
+    { src: "photos/13.jpg" },
+    { src: "photos/14.jpg" },
+    { src: "photos/15.jpg" },
+    { src: "photos/16.jpg" },
+    { src: "photos/17.jpg" },
+    { src: "photos/18.jpg" },
   ],
   dureePhoto: 600, // défilement automatique : 0,6 seconde par photo
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
@@ -86,18 +102,16 @@ function burst(x = innerWidth / 2, y = innerHeight / 2, count = 160) {
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 6 + Math.random() * 11;
-    const isHeart = Math.random() < 0.25;
     pieces.push({
       x, y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed - 6,
-      size: isHeart ? 14 + Math.random() * 10 : 6 + Math.random() * 6,
+      size: 6 + Math.random() * 6,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       rot: Math.random() * Math.PI,
       vr: (Math.random() - 0.5) * 0.3,
       life: 0,
       maxLife: 75 + Math.random() * 45,
-      heart: isHeart,
     });
   }
   if (!running) { running = true; requestAnimationFrame(tick); }
@@ -125,13 +139,8 @@ function tick() {
     ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
     ctx.translate(p.x, p.y);
     ctx.rotate(p.rot);
-    if (p.heart) {
-      ctx.font = `${p.size}px serif`;
-      ctx.fillText("🤍", -p.size / 2, p.size / 2);
-    } else {
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
-    }
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
     ctx.restore();
   }
   if (pieces.length) requestAnimationFrame(tick);
@@ -149,8 +158,7 @@ function showMain() {
   slideshow.classList.add("hide");
   setTimeout(() => (slideshow.hidden = true), 400);
   window.scrollTo(0, 0);
-  burst(innerWidth / 2, innerHeight / 3, 200);
-  setTimeout(() => rain(1500), 150);
+  rain(1500);
 }
 
 // Photos d'attente tant que les vraies ne sont pas ajoutées
@@ -193,7 +201,18 @@ function runSlideshow() {
       im.alt = prenom;
       const fail = () => (img.innerHTML = '<div class="slide-placeholder">🤍</div>');
       if (preloaded[i].complete && !preloaded[i].naturalWidth) fail();
-      else { im.onerror = fail; img.appendChild(im); }
+      else {
+        im.onerror = fail;
+        // Photo en paysage : affichée en entier sur un fond flouté
+        const fit = () => {
+          if (im.naturalWidth > im.naturalHeight) {
+            img.classList.add("landscape");
+            img.style.setProperty("--bg", `url("${item.src}")`);
+          }
+        };
+        im.complete && im.naturalWidth ? fit() : im.addEventListener("load", fit);
+        img.appendChild(im);
+      }
     } else {
       img.innerHTML = `<div class="slide-placeholder"><div>${item.emoji}<small>Photo bientôt 📸</small></div></div>`;
     }
@@ -207,7 +226,6 @@ function runSlideshow() {
     if (prev) { const p = prev; p.classList.add("out"); setTimeout(() => p.remove(), 300); }
     prev = slide;
     bars.forEach((b, k) => b.classList.toggle("on", k <= i));
-    burst(innerWidth / 2, innerHeight / 2, 18);
     i++;
     setTimeout(next, CONFIG.dureePhoto);
   })();
@@ -216,7 +234,7 @@ function runSlideshow() {
 
 document.getElementById("openGift").addEventListener("click", (e) => {
   e.currentTarget.disabled = true; // évite de lancer le diaporama deux fois
-  burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 220);
+  burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 90);
   intro.classList.add("hide");
   setTimeout(() => intro.remove(), 450);
   runSlideshow();
