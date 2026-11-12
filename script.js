@@ -33,8 +33,9 @@ const CONFIG = {
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
-  // 🎵 Musique lancée à l'ouverture du cadeau (mets le fichier dans le dossier "audio/")
-  musique: "audio/parapluie.mp3",
+  // 🎵 Musiques (fichiers dans le dossier "audio/")
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3", // refrain pendant le défilement des photos
+  musique: "audio/parapluie.mp3", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -152,28 +153,68 @@ function tick() {
 }
 
 /* ---------- Musique ---------- */
-const music = new Audio();
-music.loop = true;
-music.preload = "auto";
-music.volume = 0.8;
-const musicBtn = document.getElementById("musicBtn");
-let musicOk = false;
-if (CONFIG.musique) {
-  music.src = CONFIG.musique;
-  music.addEventListener("canplay", () => (musicOk = true), { once: true });
-  music.addEventListener("error", () => { musicOk = false; musicBtn.hidden = true; });
+function makeTrack(src, loop) {
+  if (!src) return null;
+  const a = new Audio();
+  a.src = src;
+  a.loop = loop;
+  a.preload = "auto";
+  return a;
 }
-function setMusicIcon() { musicBtn.textContent = music.paused ? "🔇" : "🔊"; }
+const introTrack = makeTrack(CONFIG.musiqueDiaporama, false);
+const mainTrack = makeTrack(CONFIG.musique, true);
+let music = introTrack || mainTrack; // piste en cours
+let userMuted = false;
+const musicBtn = document.getElementById("musicBtn");
+
+function setMusicIcon() { musicBtn.textContent = !music || music.paused ? "🔇" : "🔊"; }
+[introTrack, mainTrack].forEach((t) => {
+  if (!t) return;
+  t.addEventListener("play", setMusicIcon);
+  t.addEventListener("pause", setMusicIcon);
+  t.addEventListener("error", () => { if (t === music) musicBtn.hidden = true; });
+});
+
+// Doit être appelé pendant le clic (sinon les téléphones bloquent le son)
 function startMusic() {
-  if (!CONFIG.musique) return;
+  if (!music) return;
+  // « Débloque » la 2e piste sur iPhone en la lançant sans son pendant le clic
+  if (introTrack && mainTrack) {
+    mainTrack.muted = true;
+    mainTrack.play().then(() => { if (music !== mainTrack) { mainTrack.pause(); mainTrack.currentTime = 0; } mainTrack.muted = false; })
+      .catch(() => (mainTrack.muted = false));
+  }
   music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
 }
+
+function fade(track, from, to, ms, done) {
+  const steps = 15; let k = 0;
+  track.volume = from;
+  const id = setInterval(() => {
+    k++;
+    track.volume = Math.min(1, Math.max(0, from + (to - from) * (k / steps)));
+    if (k >= steps) { clearInterval(id); done && done(); }
+  }, ms / steps);
+}
+
+// Passe du refrain à la musique principale quand la page s'ouvre
+function switchToMainMusic() {
+  if (!introTrack || !mainTrack || music === mainTrack) return;
+  const old = introTrack;
+  music = mainTrack;
+  fade(old, old.volume, 0, 600, () => { old.pause(); });
+  if (userMuted) return setMusicIcon();
+  mainTrack.currentTime = 0;
+  mainTrack.volume = 0;
+  mainTrack.play().then(() => { musicBtn.hidden = false; fade(mainTrack, 0, 1, 900); }).catch(() => {});
+}
+
 musicBtn.addEventListener("click", () => {
-  music.paused ? music.play().catch(() => {}) : music.pause();
+  if (!music) return;
+  if (music.paused) { userMuted = false; music.volume = 1; music.play().catch(() => {}); }
+  else { userMuted = true; music.pause(); }
   setMusicIcon();
 });
-music.addEventListener("play", setMusicIcon);
-music.addEventListener("pause", setMusicIcon);
 
 /* ---------- Ouverture du cadeau → diaporama → page ---------- */
 const intro = document.getElementById("intro");
@@ -186,6 +227,7 @@ function showMain() {
   slideshow.classList.add("hide");
   setTimeout(() => (slideshow.hidden = true), 400);
   window.scrollTo(0, 0);
+  switchToMainMusic();
   rain(1500);
 }
 
@@ -276,10 +318,10 @@ let musicWasPlaying = false;
 videos.forEach((v) => {
   v.addEventListener("play", () => {
     videos.forEach((o) => { if (o !== v) o.pause(); });
-    if (!music.paused) { musicWasPlaying = true; music.pause(); }
+    if (music && !music.paused) { musicWasPlaying = true; music.pause(); }
   });
   const resume = () => {
-    if (musicWasPlaying && [...videos].every((o) => o.paused)) { musicWasPlaying = false; music.play().catch(() => {}); }
+    if (musicWasPlaying && !userMuted && [...videos].every((o) => o.paused)) { musicWasPlaying = false; music.play().catch(() => {}); }
   };
   v.addEventListener("pause", resume);
   v.addEventListener("ended", resume);
