@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Joyeux anniversaire 🤍</title>
+  <meta name="description" content="Une page pour fêter l'anniversaire d'une femme battante, courageuse et inspirante." />
+  <meta property="og:title" content="Joyeux anniversaire 🤍" />
+  <meta property="og:description" content="Une surprise rien que pour toi 🎉" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="floating" aria-hidden="true"></div>
+
+  <!-- ÉCRAN D'OUVERTURE -->
+  <section class="intro" id="intro">
+    <p class="intro-small">Une surprise t'attend…</p>
+    <button class="gift" id="openGift" aria-label="Ouvrir le cadeau">🎁</button>
+    <p class="intro-hint">Touche le cadeau</p>
+  </section>
+
+  <main id="main" hidden>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="big-heart" aria-hidden="true">🤍</div>
+      <h1>
+        <span class="line">Joyeux</span>
+        <span class="line">anniversaire</span>
+        <span class="name" data-name>ma belle</span>
+      </h1>
+      <p class="subtitle">🎉 Aujourd'hui, c'est ta journée ✨</p>
+      <a href="#qualites" class="scroll-down">Descends ↓</a>
+    </section>
+
+    <!-- QUALITÉS -->
+    <section class="qualities" id="qualites">
+      <h2 class="reveal">Tu es une femme…</h2>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-emoji">💪</div>
+          <h3>Battante</h3>
+          <p>Tu ne lâches jamais rien. Chaque obstacle devient pour toi une marche de plus.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-emoji">🦁</div>
+          <h3>Courageuse</h3>
+          <p>Tu avances même quand c'est difficile, avec une force qui force le respect.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-emoji">🌟</div>
+          <h3>Inspirante</h3>
+          <p>Ton travail, ta détermination et ta façon d'être me donnent envie de me dépasser.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-emoji">🤍</div>
+          <h3>Au grand cœur</h3>
+          <p>Derrière toute cette force, il y a une douceur et une générosité rares.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- MESSAGE -->
+    <section class="letter-section">
+      <div class="letter reveal">
+        <div class="letter-heart">🤍</div>
+        <p class="letter-text" id="letterText"></p>
+        <p class="signature">— Avec toute mon admiration 🤍</p>
+      </div>
+    </section>
+
+    <!-- GÂTEAU -->
+    <section class="cake-section">
+      <h2 class="reveal">Fais un vœu… 🌠</h2>
+      <div class="cake reveal" id="cake">
+        <div class="candles">
+          <div class="candle"><span class="flame"></span></div>
+          <div class="candle"><span class="flame"></span></div>
+          <div class="candle"><span class="flame"></span></div>
+        </div>
+        <div class="layer top"></div>
+        <div class="layer middle"></div>
+        <div class="layer bottom"></div>
+        <div class="plate"></div>
+      </div>
+      <button class="btn" id="blow">🌬️ Souffle les bougies</button>
+      <p class="wish" id="wish" hidden>Que tous tes rêves se réalisent 🥂✨<br />Tu le mérites plus que personne.</p>
+    </section>
+
+    <footer>
+      <button class="btn ghost" id="party">🎊 Encore des confettis !</button>
+      <p>Fait avec 🤍 pour toi</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

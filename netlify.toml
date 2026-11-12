@@ -1,0 +1,27 @@
+# Configuration Netlify — site statique, aucun build nécessaire
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Toute URL inconnue renvoie vers la page d'anniversaire
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
