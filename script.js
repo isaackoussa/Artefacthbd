@@ -2,17 +2,33 @@
    ✏️ PERSONNALISATION — modifie seulement cette partie
    ========================================================= */
 const CONFIG = {
-  // Prénom de ton amie (tu peux aussi utiliser l'URL : ?prenom=Sarah)
-  prenom: "ma belle",
+  // Prénom (tu peux aussi utiliser l'URL : ?prenom=Flora)
+  prenom: "Flora",
+
+  // Petit badge affiché sous son prénom (mets "" pour le cacher)
+  badge: "LMA",
+
+  // 📸 Photos du diaporama d'entrée : mets les fichiers dans le dossier "photos/"
+  // et écris leur nom ici, dans l'ordre. La légende est facultative.
+  photos: [
+    // { src: "photos/1.jpg", legende: "Ma Flora 🤍" },
+    // { src: "photos/2.jpg", legende: "Toujours souriante ✨" },
+  ],
+  dureePhoto: 1800, // millisecondes par photo
 
   // Le message qui s'écrit tout seul dans la lettre
   message:
-    "Joyeux anniversaire ! 🎂\n\n" +
-    "Je voulais te dire à quel point tu m'inspires. " +
-    "Tu es une femme battante, courageuse, qui travaille dur et qui ne baisse jamais les bras. " +
-    "Ta force et ta détermination me motivent chaque jour à donner le meilleur de moi-même.\n\n" +
-    "Que cette nouvelle année t'apporte autant de bonheur, de réussite et d'amour " +
-    "que tu en donnes autour de toi. Tu mérites tout ce qu'il y a de plus beau. 🤍",
+    "Joyeux anniversaire Flora ! 🎂\n\n" +
+    "Tu es une femme courageuse et travailleuse, et ta détermination m'inspire beaucoup.\n\n" +
+    "Je te souhaite une très belle année, pleine de joie, de réussite et de beaux moments. 🤍",
+
+  // 🙏 Bénédictions (emoji + texte)
+  benedictions: [
+    ["🙏", "Que Dieu te bénisse et veille sur toi tout au long de cette nouvelle année."],
+    ["🌿", "Qu'Il te donne la <strong>santé</strong> et la <strong>paix</strong> du cœur."],
+    ["✨", "Que ton travail soit <strong>béni</strong> et que tes projets réussissent."],
+    ["💖", "Que tu sois toujours entourée d'<strong>amour</strong> et de belles personnes."],
+  ],
 };
 
 /* ========================================================= */
@@ -24,6 +40,9 @@ const params = new URLSearchParams(location.search);
 const prenom = (params.get("prenom") || CONFIG.prenom).trim();
 document.querySelectorAll("[data-name]").forEach((el) => (el.textContent = prenom));
 document.title = `Joyeux anniversaire ${prenom} 🤍`;
+document.querySelectorAll("[data-badge]").forEach((el) => {
+  if (CONFIG.badge) el.textContent = CONFIG.badge; else el.remove();
+});
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -118,16 +137,97 @@ function tick() {
   else { running = false; ctx.clearRect(0, 0, innerWidth, innerHeight); }
 }
 
-/* ---------- Ouverture du cadeau ---------- */
+/* ---------- Ouverture du cadeau → diaporama → page ---------- */
 const intro = document.getElementById("intro");
 const main = document.getElementById("main");
+const slideshow = document.getElementById("slideshow");
+
+function showMain() {
+  if (!main.hidden) return;
+  main.hidden = false;
+  slideshow.classList.add("hide");
+  setTimeout(() => (slideshow.hidden = true), 800);
+  window.scrollTo(0, 0);
+  burst(innerWidth / 2, innerHeight / 3, 200);
+  setTimeout(() => rain(2200), 300);
+}
+
+// Photos d'attente tant que les vraies ne sont pas ajoutées
+const PLACEHOLDERS = [
+  { emoji: "🤍", legende: `${prenom}…` },
+  { emoji: "🌸", legende: "Une femme battante" },
+  { emoji: "🦁", legende: "Courageuse" },
+  { emoji: "🌟", legende: "Inspirante" },
+  { emoji: "🎂", legende: "Joyeux anniversaire !" },
+];
+
+function runSlideshow() {
+  const list = CONFIG.photos.length ? CONFIG.photos : PLACEHOLDERS;
+  const stage = document.getElementById("slideStage");
+  const caption = document.getElementById("slideCaption");
+  const progress = document.getElementById("slideProgress");
+  progress.innerHTML = list.map(() => "<span></span>").join("");
+  const bars = progress.querySelectorAll("span");
+
+  slideshow.hidden = false;
+  let i = 0, prev = null;
+  (function next() {
+    if (!main.hidden) return;
+    if (i >= list.length) return showMain();
+    const item = list[i];
+    const slide = document.createElement("div");
+    slide.className = "slide";
+    slide.style.setProperty("--r", (i % 2 ? 4 : -4) + Math.random() * 2 - 1 + "deg");
+    const img = document.createElement("div");
+    img.className = "slide-img";
+    if (item.src) {
+      const im = new Image();
+      im.alt = item.legende || prenom;
+      im.src = item.src;
+      im.onerror = () => (img.innerHTML = '<div class="slide-placeholder">🤍</div>');
+      img.appendChild(im);
+    } else {
+      img.innerHTML = `<div class="slide-placeholder"><div>${item.emoji}<small>Photo bientôt 📸</small></div></div>`;
+    }
+    slide.appendChild(img);
+    const label = document.createElement("div");
+    label.className = "slide-label";
+    label.textContent = prenom + " 🤍";
+    slide.appendChild(label);
+    stage.appendChild(slide);
+    requestAnimationFrame(() => requestAnimationFrame(() => slide.classList.add("in")));
+    if (prev) { const p = prev; p.classList.add("out"); setTimeout(() => p.remove(), 600); }
+    prev = slide;
+    caption.textContent = item.legende || "";
+    bars.forEach((b, k) => b.classList.toggle("on", k <= i));
+    burst(innerWidth / 2, innerHeight / 2, 18);
+    i++;
+    setTimeout(next, CONFIG.dureePhoto);
+  })();
+}
+
+document.getElementById("skipSlides").addEventListener("click", showMain);
+
 document.getElementById("openGift").addEventListener("click", (e) => {
   burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 220);
-  main.hidden = false;
   intro.classList.add("hide");
-  setTimeout(() => rain(2000), 500);
   setTimeout(() => intro.remove(), 900);
+  runSlideshow();
 });
+
+/* ---------- Bénédictions ---------- */
+const blessingList = document.getElementById("blessingList");
+CONFIG.benedictions.forEach(([emoji, text], k) => {
+  const li = document.createElement("li");
+  li.className = "blessing";
+  li.style.transitionDelay = (k % 2) * 0.1 + "s";
+  li.innerHTML = `<span class="blessing-emoji">${emoji}</span><span>${text}</span>`;
+  blessingList.appendChild(li);
+});
+const amen = document.createElement("p");
+amen.className = "amen reveal";
+amen.textContent = "Amen 🤍🙏";
+blessingList.after(amen);
 
 /* ---------- Apparition au scroll ---------- */
 const observer = new IntersectionObserver(
@@ -136,7 +236,7 @@ const observer = new IntersectionObserver(
   }),
   { threshold: 0.2 }
 );
-document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+document.querySelectorAll(".reveal, .blessing").forEach((el) => observer.observe(el));
 
 /* ---------- Lettre qui s'écrit ---------- */
 const letter = document.getElementById("letterText");

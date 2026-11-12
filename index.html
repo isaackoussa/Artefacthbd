@@ -24,6 +24,14 @@
     <p class="intro-hint">Touche le cadeau</p>
   </section>
 
+  <!-- DIAPORAMA PHOTOS -->
+  <section class="slideshow" id="slideshow" hidden aria-label="Ses photos">
+    <div class="slide-stage" id="slideStage"></div>
+    <p class="slide-caption" id="slideCaption"></p>
+    <div class="slide-progress" id="slideProgress"></div>
+    <button class="skip" id="skipSlides">Passer ⏭</button>
+  </section>
+
   <main id="main" hidden>
     <!-- HERO -->
     <section class="hero">
@@ -31,8 +39,9 @@
       <h1>
         <span class="line">Joyeux</span>
         <span class="line">anniversaire</span>
-        <span class="name" data-name>ma belle</span>
+        <span class="name" data-name>Flora</span>
       </h1>
+      <p class="badge" data-badge>LMA</p>
       <p class="subtitle">🎉 Aujourd'hui, c'est ta journée ✨</p>
       <a href="#qualites" class="scroll-down">Descends ↓</a>
     </section>
@@ -44,22 +53,22 @@
         <article class="card reveal">
           <div class="card-emoji">💪</div>
           <h3>Battante</h3>
-          <p>Tu ne lâches jamais rien. Chaque obstacle devient pour toi une marche de plus.</p>
+          <p>Tu avances avec détermination, quoi qu'il arrive.</p>
         </article>
         <article class="card reveal">
           <div class="card-emoji">🦁</div>
           <h3>Courageuse</h3>
-          <p>Tu avances même quand c'est difficile, avec une force qui force le respect.</p>
+          <p>Tu fais face aux défis avec beaucoup de courage.</p>
         </article>
         <article class="card reveal">
           <div class="card-emoji">🌟</div>
           <h3>Inspirante</h3>
-          <p>Ton travail, ta détermination et ta façon d'être me donnent envie de me dépasser.</p>
+          <p>Ton sérieux et ton travail sont une vraie source d'inspiration.</p>
         </article>
         <article class="card reveal">
           <div class="card-emoji">🤍</div>
           <h3>Au grand cœur</h3>
-          <p>Derrière toute cette force, il y a une douceur et une générosité rares.</p>
+          <p>Ta gentillesse et ta générosité font du bien autour de toi.</p>
         </article>
       </div>
     </section>
@@ -69,8 +78,14 @@
       <div class="letter reveal">
         <div class="letter-heart">🤍</div>
         <p class="letter-text" id="letterText"></p>
-        <p class="signature">— Avec toute mon admiration 🤍</p>
+        <p class="signature">— Avec toute mon amitié 🤍</p>
       </div>
+    </section>
+
+    <!-- BÉNÉDICTIONS -->
+    <section class="blessings">
+      <h2 class="reveal">Mes bénédictions pour toi 🙏</h2>
+      <ul class="blessing-list" id="blessingList"></ul>
     </section>
 
     <!-- GÂTEAU -->
@@ -88,7 +103,7 @@
         <div class="plate"></div>
       </div>
       <button class="btn" id="blow">🌬️ Souffle les bougies</button>
-      <p class="wish" id="wish" hidden>Que tous tes rêves se réalisent 🥂✨<br />Tu le mérites plus que personne.</p>
+      <p class="wish" id="wish" hidden>Que tous tes vœux se réalisent 🥂✨</p>
     </section>
 
     <footer>

@@ -4,7 +4,10 @@ Page animée pour souhaiter un joyeux anniversaire à une amie battante, courage
 
 ## ✏️ Personnaliser
 Ouvre `script.js` et modifie le bloc `CONFIG` tout en haut :
-- `prenom` : le prénom de ton amie
+- `prenom` : le prénom (Flora)
+- `badge` : le petit badge sous le prénom (LMA)
+- `photos` : les photos du diaporama d'entrée (à mettre dans le dossier `photos/`)
+- `benedictions` : la liste des bénédictions
 - `message` : le texte de la lettre (les `\n` font des retours à la ligne)
 
 Astuce : tu peux aussi mettre le prénom dans le lien → `https://ton-site.netlify.app/?prenom=Sarah`
