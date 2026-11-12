@@ -240,6 +240,12 @@ document.getElementById("openGift").addEventListener("click", (e) => {
   runSlideshow();
 }, { once: true });
 
+/* ---------- Vidéos : une seule à la fois ---------- */
+const videos = document.querySelectorAll(".video-card video");
+videos.forEach((v) => v.addEventListener("play", () => {
+  videos.forEach((o) => { if (o !== v) o.pause(); });
+}));
+
 /* ---------- Bénédictions ---------- */
 const blessingList = document.getElementById("blessingList");
 CONFIG.benedictions.forEach(([emoji, text], k) => {

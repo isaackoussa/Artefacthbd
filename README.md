@@ -15,7 +15,7 @@ Astuce : tu peux aussi mettre le prénom dans le lien → `https://ton-site.netl
 ## 🚀 Mettre en ligne sur Netlify
 **Option 1 — Glisser-déposer (le plus simple)**
 1. Va sur https://app.netlify.com/drop
-2. Glisse le dossier contenant `index.html`, `style.css`, `script.js`, `favicon.svg`, `netlify.toml` et le dossier `photos`
+2. Glisse le dossier contenant `index.html`, `style.css`, `script.js`, `favicon.svg`, `netlify.toml` et les dossiers `photos` et `videos`
 3. C'est en ligne ! Tu peux changer le nom du site dans *Site configuration → Change site name*
 
 **Option 2 — Depuis GitHub**
@@ -32,4 +32,5 @@ Astuce : tu peux aussi mettre le prénom dans le lien → `https://ton-site.netl
 | `script.js` | Confettis, emojis flottants, lettre, bougies + **personnalisation** |
 | `netlify.toml` | Configuration Netlify |
 | `photos/` | Les photos du diaporama |
+| `videos/` | Les vidéos (section « En vidéo ») |
 | `favicon.svg` | Petite icône 🤍 de l'onglet |
