@@ -33,5 +33,5 @@ Astuce : tu peux aussi mettre le prénom dans le lien → `https://ton-site.netl
 | `netlify.toml` | Configuration Netlify |
 | `photos/` | Les photos du diaporama |
 | `videos/` | Les vidéos (section « En vidéo ») |
-| `audio/` | La musique (`parapluie.mp3`) lancée à l'ouverture du cadeau |
+| `audio/` | La musique « Parapluie » (Tiakola) lancée à l'ouverture du cadeau |
 | `favicon.svg` | Petite icône 🤍 de l'onglet |
