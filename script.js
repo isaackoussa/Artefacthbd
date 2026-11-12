@@ -207,7 +207,6 @@ function runSlideshow() {
   })();
 }
 
-document.getElementById("skipSlides").addEventListener("click", showMain);
 
 document.getElementById("openGift").addEventListener("click", (e) => {
   burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 220);
