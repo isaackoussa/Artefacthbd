@@ -34,8 +34,8 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261115a", // refrain pendant le défilement des photos
-  musique: "audio/musique.mp3?v=20261115a", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261115b", // refrain pendant le défilement des photos
+  musique: "audio/musique.mp3?v=20261115b", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -194,11 +194,29 @@ function switchToMainMusic(force) {
   music.loop = true;
   music.currentTime = 0;
   if (userMuted) return setMusicIcon();
+  // Site en arrière-plan à ce moment-là : la musique démarrera au retour
+  if (document.hidden) { resumeOnReturn = true; return setMusicIcon(); }
   music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
 }
 
+/* Pas de son en arrière-plan : la musique s'arrête quand on quitte le site
+   (autre appli, écran d'accueil, autre onglet, téléphone verrouillé)
+   et reprend quand on revient. */
+let resumeOnReturn = false;
+function onLeave() {
+  if (!music.paused) { resumeOnReturn = true; music.pause(); }
+}
+function onReturn() {
+  if (!resumeOnReturn || userMuted) return;
+  resumeOnReturn = false;
+  music.play().catch(() => setMusicIcon());
+}
+document.addEventListener("visibilitychange", () => (document.hidden ? onLeave() : onReturn()));
+window.addEventListener("pagehide", onLeave);
+window.addEventListener("pageshow", () => { if (!document.hidden) onReturn(); });
+
 musicBtn.addEventListener("click", () => {
-  if (music.paused) { userMuted = false; music.play().catch(() => {}); }
+  if (music.paused) { userMuted = false; resumeOnReturn = false; music.play().catch(() => {}); }
   else { userMuted = true; music.pause(); }
   setMusicIcon();
 });
