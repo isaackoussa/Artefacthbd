@@ -34,8 +34,8 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261112c", // refrain pendant le défilement des photos
-  musique: "audio/parapluie.mp3?v=20261112c", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261115a", // refrain pendant le défilement des photos
+  musique: "audio/musique.mp3?v=20261115a", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -165,7 +165,7 @@ const musicBtn = document.getElementById("musicBtn");
 if (CONFIG.musiqueDiaporama || CONFIG.musique) {
   music.src = CONFIG.musiqueDiaporama || CONFIG.musique;
   music.loop = !CONFIG.musiqueDiaporama;
-  // Met « Parapluie » en cache à l'avance pour un enchaînement sans attente
+  // Met la musique principale en cache à l'avance pour un enchaînement sans attente
   if (CONFIG.musiqueDiaporama && CONFIG.musique) fetch(CONFIG.musique).catch(() => {});
 }
 
@@ -184,7 +184,7 @@ function startMusic() {
   music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
 }
 
-// À la fin de la dernière photo : le refrain s'arrête et « Parapluie » démarre
+// À la fin de la dernière photo : le refrain s'arrête et la musique principale démarre
 function switchToMainMusic(force) {
   if (phase === "main" || !CONFIG.musique) return;
   if (!CONFIG.musiqueDiaporama && !force) return;
