@@ -40,6 +40,28 @@ body {
   opacity: 0.85;
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.35));
 }
+.floating .float-photo {
+  position: absolute;
+  bottom: -200px;
+  background: #fff;
+  padding: 4px 4px 12px;
+  border-radius: 4px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  animation: floatPhoto linear forwards;
+  will-change: transform, opacity;
+}
+.floating .float-photo img {
+  display: block; width: 100%; aspect-ratio: 4 / 5;
+  object-fit: cover; border-radius: 2px;
+}
+@keyframes floatPhoto {
+  0%   { transform: translateY(0) rotate(var(--r)); opacity: 0; }
+  8%   { opacity: 0.4; }
+  50%  { transform: translateY(-60vh) translateX(18px) rotate(calc(var(--r) * -0.5)); }
+  92%  { opacity: 0.4; }
+  100% { transform: translateY(calc(-100vh - 260px)) translateX(-12px) rotate(var(--r)); opacity: 0; }
+}
 @keyframes floatUp {
   0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
   10%  { opacity: 0.9; }

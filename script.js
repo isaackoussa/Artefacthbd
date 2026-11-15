@@ -34,8 +34,8 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261115b", // refrain pendant le défilement des photos
-  musique: "audio/musique.mp3?v=20261115b", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261115c", // refrain pendant le défilement des photos
+  musique: "audio/musique.mp3?v=20261115c", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -84,6 +84,41 @@ if (!reduceMotion) {
   for (let i = 0; i < 12; i++) setTimeout(spawnFloating, i * 400);
   setInterval(spawnFloating, 700);
 }
+
+/* ---------- Photos qui défilent en fond (après le diaporama) ---------- */
+const BG_PHOTOS = Array.from({ length: 17 }, (_, i) => `photos/mini/${String(i + 1).padStart(2, "0")}.jpg`);
+let bgOrder = [];
+function nextBgPhoto() {
+  if (!bgOrder.length) bgOrder = BG_PHOTOS.slice().sort(() => Math.random() - 0.5);
+  return bgOrder.pop();
+}
+function spawnFloatingPhoto() {
+  if (document.hidden) return;
+  const f = document.createElement("div");
+  f.className = "float-photo";
+  const w = innerWidth < 600 ? 64 + Math.random() * 30 : 90 + Math.random() * 50;
+  f.style.width = w + "px";
+  f.style.left = Math.random() * (100 - (w / innerWidth) * 100) + "vw";
+  f.style.setProperty("--r", (Math.random() * 24 - 12).toFixed(1) + "deg");
+  const duration = 14 + Math.random() * 8;
+  f.style.animationDuration = duration + "s";
+  const img = new Image();
+  img.src = nextBgPhoto();
+  img.alt = "";
+  img.decoding = "async";
+  f.appendChild(img);
+  floating.appendChild(f);
+  setTimeout(() => f.remove(), duration * 1000);
+}
+let bgPhotosStarted = false;
+function startBackgroundPhotos() {
+  if (bgPhotosStarted || reduceMotion) return;
+  bgPhotosStarted = true;
+  for (let i = 0; i < 3; i++) setTimeout(spawnFloatingPhoto, i * 1100);
+  setInterval(spawnFloatingPhoto, innerWidth < 600 ? 3200 : 2300);
+}
+// Précharge les miniatures pendant le diaporama
+BG_PHOTOS.forEach((src) => { const im = new Image(); im.src = src; });
 
 /* ---------- Confettis (canvas) ---------- */
 const canvas = document.getElementById("confetti");
@@ -233,6 +268,7 @@ function showMain() {
   setTimeout(() => (slideshow.hidden = true), 400);
   window.scrollTo(0, 0);
   switchToMainMusic();
+  startBackgroundPhotos();
   rain(1500);
 }
 
