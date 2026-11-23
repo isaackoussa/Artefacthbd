@@ -19,28 +19,29 @@ const CONFIG = {
     { src: "photos/03.jpg" },
     { src: "photos/04.jpg" },
     { src: "photos/05.jpg" },
-    { video: "videos/clip1.mp4?v=20261124f", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
+    { video: "videos/clip1.mp4?v=20261124h", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
     { src: "photos/08.jpg" }, // look haut blanc / pantalon beige
     { src: "photos/12.jpg" },
     { src: "photos/14.jpg" },
     { src: "photos/13.jpg" },
     { src: "photos/15.jpg" }, // selfies boucles
     { src: "photos/17.jpg" },
-    { video: "videos/clip5.mp4?v=20261124f", poster: "videos/clip5.jpg", duree: 2300, vitesse: 1 }, // déjà accélérée et recadrée
+    { video: "videos/clip5a.mp4?v=20261124h", poster: "videos/clip5a.jpg", duree: 1600, vitesse: 1 }, // 1re partie : la main sur la joue
     { src: "photos/16.jpg" },
     { src: "photos/09.jpg" }, // moments marrants (paysage et portrait alternés)
     { src: "photos/06.jpg" },
     { src: "photos/10.jpg" },
     { src: "photos/18.jpg" },
+    { video: "videos/clip5b.mp4?v=20261124h", poster: "videos/clip5b.jpg", duree: 1800, vitesse: 1 }, // 2e partie : le « waouh »
     { src: "photos/11.jpg" },
     { src: "photos/07.jpg" },
     { src: "photos/21.jpg" }, // souvenirs en uniforme
     { src: "photos/23.jpg" },
-    { video: "videos/clip2.mp4?v=20261124f", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
+    { video: "videos/clip2.mp4?v=20261124h", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
     { src: "photos/26.jpg" }, // sorties et soirées
     { src: "photos/28.jpg" },
     { src: "photos/29.jpg" }, // avec l'autocollant « Mode de vie »
-    { video: "videos/clip4.mp4?v=20261124f", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
+    { video: "videos/clip4.mp4?v=20261124h", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
     { src: "photos/30.jpg" }, // avant-dernière, juste avant « bref. C'est fini »
     { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
@@ -48,11 +49,11 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124f", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124h", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261124f",
-    "audio/parapluie.mp3?v=20261124f",
+    "audio/musique.mp3?v=20261124h",
+    "audio/parapluie.mp3?v=20261124h",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
@@ -361,7 +362,8 @@ function runSlideshow() {
     const item = list[i];
     const slide = document.createElement("div");
     slide.className = "slide";
-    slide.style.setProperty("--r", (i % 2 ? 4 : -4) + Math.random() * 2 - 1 + "deg");
+    // Légère inclinaison (2,5° max) : le grand cadre ne touche pas les bords de l'écran
+    slide.style.setProperty("--r", (i % 2 ? 2 : -2) + Math.random() - 0.5 + "deg");
     const img = document.createElement("div");
     img.className = "slide-img";
     if (item.video) {

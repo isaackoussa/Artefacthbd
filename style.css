@@ -328,14 +328,15 @@ footer { position: relative; z-index: 1; text-align: center; padding: 3rem 16px 
 /* ---------- Diaporama d'entrée ---------- */
 .slideshow {
   position: fixed; inset: 0; z-index: 30;
-  max-width: none; padding: 16px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem;
+  max-width: none; padding: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
   background: radial-gradient(circle at center, var(--bg-2), var(--bg-1));
   transition: opacity 0.4s ease, visibility 0.4s;
 }
 .slideshow[hidden] { display: none; }
 .slideshow.hide { opacity: 0; visibility: hidden; }
-.slide-stage { position: relative; width: min(78vw, 380px); aspect-ratio: 4 / 5; }
+/* Cadre agrandi : presque toute la largeur, sans jamais dépasser en hauteur */
+.slide-stage { position: relative; width: min(90vw, 60vh, 560px); width: min(90vw, 60svh, 560px); aspect-ratio: 4 / 5; }
 .slide {
   position: absolute; inset: 0;
   background: #fff; padding: 10px 10px 44px; border-radius: 6px;
@@ -360,7 +361,7 @@ footer { position: relative; z-index: 1; text-align: center; padding: 3rem 16px 
 }
 .slide-placeholder small { display: block; font-size: 0.9rem; color: #3b1450; margin-top: 0.4rem; }
 .slide-label { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-family: "Dancing Script", cursive; font-size: 1.5rem; color: #3b1450; }
-.slide-progress { display: flex; gap: 4px; width: min(78vw, 380px); justify-content: center; }
+.slide-progress { display: flex; gap: 4px; width: min(90vw, 60vh, 560px); width: min(90vw, 60svh, 560px); justify-content: center; }
 .slide-progress span { flex: 0 1 22px; min-width: 3px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.25); transition: background 0.3s; }
 .slide-progress span.on { background: var(--white); }
 
