@@ -19,14 +19,14 @@ const CONFIG = {
     { src: "photos/03.jpg" },
     { src: "photos/04.jpg" },
     { src: "photos/05.jpg" },
-    { video: "videos/clip1.mp4?v=20261124i", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
+    { video: "videos/clip1.mp4?v=20261124j", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
     { src: "photos/08.jpg" }, // look haut blanc / pantalon beige
     { src: "photos/12.jpg" },
     { src: "photos/14.jpg" },
     { src: "photos/13.jpg" },
     { src: "photos/15.jpg" }, // selfies boucles
     { src: "photos/17.jpg" },
-    { video: "videos/clip5a.mp4?v=20261124i", poster: "videos/clip5a.jpg", duree: 1600, vitesse: 1 }, // la main sur la joue
+    { video: "videos/clip5a.mp4?v=20261124j", poster: "videos/clip5a.jpg", duree: 1600, vitesse: 1 }, // la main sur la joue
     { src: "photos/16.jpg" },
     { src: "photos/11.jpg" },
     { src: "photos/18.jpg" },
@@ -36,24 +36,24 @@ const CONFIG = {
     { src: "photos/10.jpg" },
     { src: "photos/21.jpg" }, // souvenirs en uniforme
     { src: "photos/23.jpg" },
-    { video: "videos/clip2.mp4?v=20261124i", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 }, // sorties et soirées
-    { src: "photos/26.jpg" },
+    { video: "videos/clip2.mp4?v=20261124j", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 }, // sorties et soirées
     { src: "photos/28.jpg" },
     { src: "photos/29.jpg" },
-    { video: "videos/clip4.mp4?v=20261124i", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
+    { video: "videos/clip4.mp4?v=20261124j", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
     { src: "photos/30.jpg" }, // « sexy nana »
-    { video: "videos/clip5b.mp4?v=20261124i", poster: "videos/clip5b.jpg", duree: 1800, vitesse: 1 }, // le « waouh », juste avant la fin
+    { src: "photos/26.jpg" }, // juste avant le « waouh »
+    { video: "videos/clip5b.mp4?v=20261124j", poster: "videos/clip5b.jpg", duree: 1800, vitesse: 1 }, // le « waouh », juste avant la fin
     { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124i", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124j", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261124i",
-    "audio/parapluie.mp3?v=20261124i",
+    "audio/musique.mp3?v=20261124j",
+    "audio/parapluie.mp3?v=20261124j",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
