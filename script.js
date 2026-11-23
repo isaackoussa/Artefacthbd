@@ -19,29 +19,28 @@ const CONFIG = {
     { src: "photos/03.jpg" },
     { src: "photos/04.jpg" },
     { src: "photos/05.jpg" },
-    { video: "videos/clip1.mp4?v=20261124e", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
+    { video: "videos/clip1.mp4?v=20261124f", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
     { src: "photos/08.jpg" }, // look haut blanc / pantalon beige
     { src: "photos/12.jpg" },
     { src: "photos/14.jpg" },
     { src: "photos/13.jpg" },
     { src: "photos/15.jpg" }, // selfies boucles
     { src: "photos/17.jpg" },
-    { video: "videos/clip3.mp4?v=20261124e", poster: "videos/clip3.jpg", duree: 1500, vitesse: 2 },
+    { video: "videos/clip5.mp4?v=20261124f", poster: "videos/clip5.jpg", duree: 2300, vitesse: 1 }, // déjà accélérée et recadrée
     { src: "photos/16.jpg" },
-    { src: "photos/06.jpg" }, // moments marrants
-    { src: "photos/09.jpg" },
-    { src: "photos/24.jpg" },
+    { src: "photos/09.jpg" }, // moments marrants (paysage et portrait alternés)
+    { src: "photos/06.jpg" },
+    { src: "photos/10.jpg" },
+    { src: "photos/18.jpg" },
     { src: "photos/11.jpg" },
     { src: "photos/07.jpg" },
-    { src: "photos/18.jpg" },
-    { src: "photos/10.jpg" },
     { src: "photos/21.jpg" }, // souvenirs en uniforme
     { src: "photos/23.jpg" },
-    { video: "videos/clip2.mp4?v=20261124e", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
+    { video: "videos/clip2.mp4?v=20261124f", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
     { src: "photos/26.jpg" }, // sorties et soirées
     { src: "photos/28.jpg" },
     { src: "photos/29.jpg" }, // avec l'autocollant « Mode de vie »
-    { video: "videos/clip4.mp4?v=20261124e", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
+    { video: "videos/clip4.mp4?v=20261124f", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
     { src: "photos/30.jpg" }, // avant-dernière, juste avant « bref. C'est fini »
     { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
@@ -49,11 +48,11 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124e", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124f", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261124e",
-    "audio/parapluie.mp3?v=20261124e",
+    "audio/musique.mp3?v=20261124f",
+    "audio/parapluie.mp3?v=20261124f",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
