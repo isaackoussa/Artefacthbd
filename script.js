@@ -32,17 +32,22 @@ const CONFIG = {
     { src: "photos/19.jpg" },
     { src: "photos/20.jpg" },
     { src: "photos/21.jpg" },
-    { src: "photos/22.jpg" }, // « bref. C'est fini » reste en dernier
+    { src: "photos/22.jpg" },
+    { src: "photos/23.jpg" },
+    { src: "photos/24.jpg" },
+    { src: "photos/25.jpg" },
+    { src: "photos/26.jpg" },
+    { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261123d", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124a", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261123d",
-    "audio/parapluie.mp3?v=20261123d",
+    "audio/musique.mp3?v=20261124a",
+    "audio/parapluie.mp3?v=20261124a",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
@@ -95,7 +100,7 @@ if (!reduceMotion) {
 }
 
 /* ---------- Photos qui défilent en fond (après le diaporama) ---------- */
-const BG_PHOTOS = Array.from({ length: 21 }, (_, i) => `photos/mini/${String(i + 1).padStart(2, "0")}.jpg`);
+const BG_PHOTOS = Array.from({ length: 26 }, (_, i) => `photos/mini/${String(i + 1).padStart(2, "0")}.jpg`);
 let bgOrder = [];
 function nextBgPhoto() {
   if (!bgOrder.length) bgOrder = BG_PHOTOS.slice().sort(() => Math.random() - 0.5);
