@@ -29,19 +29,24 @@ const CONFIG = {
     { src: "photos/16.jpg" },
     { src: "photos/17.jpg" },
     { src: "photos/18.jpg" },
+    { src: "photos/19.jpg" },
+    { src: "photos/20.jpg" },
+    { src: "photos/21.jpg" },
+    { src: "photos/22.jpg" }, // « bref. C'est fini » reste en dernier
   ],
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261115c", // refrain pendant le défilement des photos
-  musique: "audio/musique.mp3?v=20261115c", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261123a", // refrain pendant le défilement des photos
+  musique: "audio/musique.mp3?v=20261123a", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
   message:
     "Joyeux anniversaire Flora ! 🎂\n\n" +
     "Tu es une femme courageuse et travailleuse, et ta détermination m'inspire beaucoup.\n\n" +
+    "Tu me motives à travailler dur : d'une certaine manière, tu es ma source de motivation. 💪\n\n" +
     "Je te souhaite une très belle année, pleine de joie, de réussite et de beaux moments. 🤍",
 
   // 🙏 Bénédictions (emoji + texte)
@@ -86,7 +91,7 @@ if (!reduceMotion) {
 }
 
 /* ---------- Photos qui défilent en fond (après le diaporama) ---------- */
-const BG_PHOTOS = Array.from({ length: 17 }, (_, i) => `photos/mini/${String(i + 1).padStart(2, "0")}.jpg`);
+const BG_PHOTOS = Array.from({ length: 21 }, (_, i) => `photos/mini/${String(i + 1).padStart(2, "0")}.jpg`);
 let bgOrder = [];
 function nextBgPhoto() {
   if (!bgOrder.length) bgOrder = BG_PHOTOS.slice().sort(() => Math.random() - 0.5);

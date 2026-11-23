@@ -250,6 +250,20 @@ h2 {
 @keyframes smoke { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-40px) scaleX(2); } }
 .wish { margin-top: 1.6rem; font-size: clamp(1.1rem, 4.5vw, 1.4rem); line-height: 1.7; animation: popIn 0.8s both; }
 
+/* ---------- Petit Kdo (QR code) ---------- */
+.kdo { padding-top: 3rem; }
+.qr-card {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  background: #fff; color: #3b1450; text-decoration: none;
+  padding: 18px 18px 14px; border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(246, 213, 142, 0.25);
+  transition: transform 0.25s ease;
+}
+.qr-card:hover { transform: translateY(-4px) rotate(-1deg); }
+.qr-card svg { display: block; width: min(60vw, 230px); height: auto; }
+.qr-card svg path { fill: #1a0b2e; }
+.qr-hint { font-weight: 600; font-size: 0.95rem; }
+
 /* ---------- Boutons ---------- */
 .btn {
   font-family: inherit; font-size: 1.05rem; font-weight: 600;
