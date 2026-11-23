@@ -351,6 +351,7 @@ footer { position: relative; z-index: 1; text-align: center; padding: 3rem 16px 
   background: var(--bg) center / cover; filter: blur(16px) brightness(0.8);
 }
 .slide-img.landscape img { position: relative; object-fit: contain; }
+.slide-img .slide-video { display: block; width: 100%; height: 100%; object-fit: cover; background: #000; }
 .slide-img img { width: 100%; height: 100%; object-fit: cover; animation: kenburns 0.8s ease-out both; }
 @keyframes kenburns { from { transform: scale(1.15); } to { transform: scale(1); } }
 .slide-placeholder {

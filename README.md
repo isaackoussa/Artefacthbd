@@ -32,5 +32,6 @@ Astuce : tu peux aussi mettre le prénom dans le lien → `https://ton-site.netl
 | `script.js` | Confettis, emojis flottants, lettre, bougies + **personnalisation** |
 | `netlify.toml` | Configuration Netlify |
 | `photos/` | Les photos du diaporama |
+| `videos/` | Les 2 petites vidéos du diaporama (sans son) |
 | `audio/` | Refrain de « Mode de vie » pendant le diaporama, puis `musique.mp3` en boucle |
 | `favicon.svg` | Petite icône 🤍 de l'onglet |

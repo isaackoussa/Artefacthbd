@@ -37,17 +37,21 @@ const CONFIG = {
     { src: "photos/24.jpg" },
     { src: "photos/25.jpg" },
     { src: "photos/26.jpg" },
+    { src: "photos/28.jpg" },
+    // Petites vidéos : jouées sans son (le refrain continue), en accéléré
+    { video: "videos/clip1.mp4?v=20261124b", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
+    { video: "videos/clip2.mp4?v=20261124b", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
     { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124a", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124b", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261124a",
-    "audio/parapluie.mp3?v=20261124a",
+    "audio/musique.mp3?v=20261124b",
+    "audio/parapluie.mp3?v=20261124b",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
@@ -100,7 +104,8 @@ if (!reduceMotion) {
 }
 
 /* ---------- Photos qui défilent en fond (après le diaporama) ---------- */
-const BG_PHOTOS = Array.from({ length: 26 }, (_, i) => `photos/mini/${String(i + 1).padStart(2, "0")}.jpg`);
+// Miniatures de toutes les photos du diaporama, sauf la dernière (« bref. C'est fini ») et les vidéos
+const BG_PHOTOS = CONFIG.photos.slice(0, -1).filter((p) => p.src).map((p) => p.src.replace("photos/", "photos/mini/"));
 let bgOrder = [];
 function nextBgPhoto() {
   if (!bgOrder.length) bgOrder = BG_PHOTOS.slice().sort(() => Math.random() - 0.5);
@@ -320,6 +325,20 @@ const PLACEHOLDERS = [
 
 // Précharge les photos dès l'arrivée sur la page pour qu'elles s'affichent sans délai
 const preloaded = CONFIG.photos.map((ph) => {
+  if (ph.video) {
+    // Vidéo préparée à l'avance : sans son, lue dans la page (obligatoire sur iPhone)
+    const v = document.createElement("video");
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("muted", "");
+    v.preload = "auto";
+    if (ph.poster) v.poster = ph.poster;
+    v.src = ph.video;
+    v.load();
+    return v;
+  }
   const im = new Image();
   im.decoding = "async";
   im.src = ph.src;
@@ -344,7 +363,14 @@ function runSlideshow() {
     slide.style.setProperty("--r", (i % 2 ? 4 : -4) + Math.random() * 2 - 1 + "deg");
     const img = document.createElement("div");
     img.className = "slide-img";
-    if (item.src) {
+    if (item.video) {
+      const v = preloaded[i];
+      v.className = "slide-video";
+      img.appendChild(v);
+      try { v.currentTime = 0; } catch (e) {}
+      v.defaultPlaybackRate = v.playbackRate = item.vitesse || 1;
+      v.play().catch(() => {}); // si la lecture est refusée, l'image d'aperçu reste affichée
+    } else if (item.src) {
       const im = preloaded[i].cloneNode();
       im.alt = prenom;
       const fail = () => (img.innerHTML = '<div class="slide-placeholder">🤍</div>');
@@ -375,7 +401,7 @@ function runSlideshow() {
     prev = slide;
     bars.forEach((b, k) => b.classList.toggle("on", k <= i));
     i++;
-    setTimeout(next, i === list.length ? CONFIG.dureeDernierePhoto : CONFIG.dureePhoto);
+    setTimeout(next, i === list.length ? CONFIG.dureeDernierePhoto : item.duree || CONFIG.dureePhoto);
   })();
 }
 
