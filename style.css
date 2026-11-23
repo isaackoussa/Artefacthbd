@@ -270,19 +270,26 @@ h2 {
 @keyframes smoke { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-40px) scaleX(2); } }
 .wish { margin-top: 1.6rem; font-size: clamp(1.1rem, 4.5vw, 1.4rem); line-height: 1.7; animation: popIn 0.8s both; }
 
-/* ---------- Petit Kdo (QR code) ---------- */
+/* ---------- Petit Kdo (QR codes) ---------- */
 .kdo { padding-top: 3rem; }
+.kdo-intro { color: var(--muted); margin: -1.6rem 0 2rem; line-height: 1.6; }
+.qr-grid {
+  display: grid; gap: 1.6rem; justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+}
 .qr-card {
-  display: inline-flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
   background: #fff; color: #3b1450; text-decoration: none;
-  padding: 18px 18px 14px; border-radius: 22px;
+  padding: 18px 18px 16px; border-radius: 22px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(246, 213, 142, 0.25);
   transition: transform 0.25s ease;
 }
-.qr-card:hover { transform: translateY(-4px) rotate(-1deg); }
-.qr-card svg { display: block; width: min(60vw, 230px); height: auto; }
+.qr-card:hover { transform: translateY(-4px); }
+.qr-card svg { display: block; width: min(56vw, 210px); height: auto; }
 .qr-card svg path { fill: #1a0b2e; }
-.qr-hint { font-weight: 600; font-size: 0.95rem; }
+.qr-title { font-weight: 700; font-size: 1.05rem; }
+.qr-desc { font-size: 0.9rem; line-height: 1.5; color: #5a3a6e; }
+.qr-url { font-size: 0.8rem; font-weight: 600; color: #8a4f9e; word-break: break-all; }
 
 /* ---------- Boutons ---------- */
 .btn {
