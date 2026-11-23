@@ -38,8 +38,12 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261123b", // refrain pendant le défilement des photos
-  musique: "audio/musique.mp3?v=20261123b", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261123c", // refrain pendant le défilement des photos
+  // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
+  musiques: [
+    "audio/musique.mp3?v=20261123c",
+    "audio/parapluie.mp3?v=20261123c",
+  ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
@@ -193,28 +197,57 @@ function tick() {
 }
 
 /* ---------- Musique ----------
-   Un seul lecteur audio pour les deux chansons : sur iPhone, une page ne peut
+   Un seul lecteur audio pour toutes les chansons : sur iPhone, une page ne peut
    pas faire jouer deux lecteurs, et seul un lecteur « débloqué » par un toucher
    peut ensuite changer de chanson tout seul. */
 const music = new Audio();
 music.preload = "auto";
+const playlist = CONFIG.musiques || [];
+let track = 0;
 let userMuted = false;
 let phase = "intro"; // "intro" (refrain pendant le diaporama) puis "main"
+let errorsInARow = 0;
 const musicBtn = document.getElementById("musicBtn");
 
-if (CONFIG.musiqueDiaporama || CONFIG.musique) {
-  music.src = CONFIG.musiqueDiaporama || CONFIG.musique;
-  music.loop = !CONFIG.musiqueDiaporama;
-  // Met la musique principale en cache à l'avance pour un enchaînement sans attente
-  if (CONFIG.musiqueDiaporama && CONFIG.musique) fetch(CONFIG.musique).catch(() => {});
+if (CONFIG.musiqueDiaporama || playlist.length) {
+  music.src = CONFIG.musiqueDiaporama || playlist[0];
+  if (!CONFIG.musiqueDiaporama) { phase = "main"; music.loop = playlist.length === 1; }
+  // Met la 1re musique principale en cache pour un enchaînement sans attente
+  if (CONFIG.musiqueDiaporama && playlist.length) fetch(playlist[0]).catch(() => {});
 }
 
 function setMusicIcon() { musicBtn.textContent = music.paused ? "🔇" : "🔊"; }
-music.addEventListener("play", setMusicIcon);
+music.addEventListener("play", () => { errorsInARow = 0; setMusicIcon(); });
 music.addEventListener("pause", setMusicIcon);
+
+// Joue la musique en cours, sauf si le son est coupé ou le site en arrière-plan
+function playIfAllowed() {
+  if (userMuted) return setMusicIcon();
+  if (document.hidden) { resumeOnReturn = true; return setMusicIcon(); }
+  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => setMusicIcon());
+}
+
+function loadTrack(i) {
+  track = i % playlist.length;
+  music.pause();
+  music.src = playlist[track];
+  music.loop = playlist.length === 1;
+  music.currentTime = 0;
+  // Prépare la suivante pendant que celle-ci joue
+  if (playlist.length > 1) fetch(playlist[(track + 1) % playlist.length]).catch(() => {});
+}
+
+// Fin d'une musique : on passe à la suivante (et on recommence après la dernière)
+music.addEventListener("ended", () => {
+  if (phase !== "main" || playlist.length < 2) return;
+  loadTrack(track + 1);
+  playIfAllowed();
+});
+
 music.addEventListener("error", () => {
-  // Refrain introuvable : on passe directement à la musique principale
-  if (phase === "intro" && CONFIG.musique && music.src.indexOf(CONFIG.musique) === -1) switchToMainMusic(true);
+  if (phase === "intro") return switchToMainMusic(true); // refrain introuvable
+  // Musique introuvable : on essaie la suivante (sans tourner en rond)
+  if (++errorsInARow < playlist.length) { loadTrack(track + 1); playIfAllowed(); }
   else musicBtn.hidden = true;
 });
 
@@ -224,19 +257,13 @@ function startMusic() {
   music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
 }
 
-// À la fin de la dernière photo : le refrain s'arrête et la musique principale démarre
+// À la fin de la dernière photo : le refrain s'arrête et les musiques principales démarrent
 function switchToMainMusic(force) {
-  if (phase === "main" || !CONFIG.musique) return;
+  if (phase === "main" || !playlist.length) return;
   if (!CONFIG.musiqueDiaporama && !force) return;
   phase = "main";
-  music.pause();
-  music.src = CONFIG.musique;
-  music.loop = true;
-  music.currentTime = 0;
-  if (userMuted) return setMusicIcon();
-  // Site en arrière-plan à ce moment-là : la musique démarrera au retour
-  if (document.hidden) { resumeOnReturn = true; return setMusicIcon(); }
-  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
+  loadTrack(0);
+  playIfAllowed();
 }
 
 /* Pas de son en arrière-plan : la musique s'arrête quand on quitte le site
