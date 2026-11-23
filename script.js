@@ -39,22 +39,23 @@ const CONFIG = {
     { src: "photos/26.jpg" },
     { src: "photos/28.jpg" },
     // Petites vidéos : jouées sans son (le refrain continue), en accéléré
-    { video: "videos/clip1.mp4?v=20261124c", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
-    { video: "videos/clip2.mp4?v=20261124c", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
+    { video: "videos/clip1.mp4?v=20261124d", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
+    { video: "videos/clip2.mp4?v=20261124d", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 },
     { src: "photos/29.jpg" }, // avec l'autocollant « Mode de vie »
-    { video: "videos/clip3.mp4?v=20261124c", poster: "videos/clip3.jpg", duree: 1500, vitesse: 2 },
-    { video: "videos/clip4.mp4?v=20261124c", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
+    { video: "videos/clip3.mp4?v=20261124d", poster: "videos/clip3.jpg", duree: 1500, vitesse: 2 },
+    { video: "videos/clip4.mp4?v=20261124d", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
+    { src: "photos/30.jpg" }, // avant-dernière, juste avant « bref. C'est fini »
     { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124c", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124d", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261124c",
-    "audio/parapluie.mp3?v=20261124c",
+    "audio/musique.mp3?v=20261124d",
+    "audio/parapluie.mp3?v=20261124d",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
