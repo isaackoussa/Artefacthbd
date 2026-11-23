@@ -38,15 +38,15 @@ const CONFIG = {
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261123a", // refrain pendant le défilement des photos
-  musique: "audio/musique.mp3?v=20261123a", // ensuite, en boucle sur le reste de la page
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261123b", // refrain pendant le défilement des photos
+  musique: "audio/musique.mp3?v=20261123b", // ensuite, en boucle sur le reste de la page
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
   // Le message qui s'écrit tout seul dans la lettre
   message:
     "Joyeux anniversaire Flora ! 🎂\n\n" +
     "Tu es une femme courageuse et travailleuse, et ta détermination m'inspire beaucoup.\n\n" +
-    "Tu me motives à travailler dur : d'une certaine manière, tu es ma source de motivation. 💪\n\n" +
+    "Tu me motives à travailler dur : d'une certaine manière, tu es une source de motivation. 💪\n\n" +
     "Je te souhaite une très belle année, pleine de joie, de réussite et de beaux moments. 🤍",
 
   // 🙏 Bénédictions (emoji + texte)
