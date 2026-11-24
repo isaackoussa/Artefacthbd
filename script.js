@@ -19,14 +19,14 @@ const CONFIG = {
     { src: "photos/03.jpg" },
     { src: "photos/04.jpg" },
     { src: "photos/05.jpg" },
-    { video: "videos/clip1.mp4?v=20261124n", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
+    { video: "videos/clip1.mp4?v=20261125b", poster: "videos/clip1.jpg", duree: 1800, vitesse: 2 },
     { src: "photos/08.jpg" }, // look haut blanc / pantalon beige
     { src: "photos/12.jpg" },
     { src: "photos/14.jpg" },
     { src: "photos/13.jpg" },
     { src: "photos/15.jpg" }, // selfies boucles
     { src: "photos/17.jpg" },
-    { video: "videos/clip5a.mp4?v=20261124n", poster: "videos/clip5a.jpg", duree: 1600, vitesse: 1 }, // la main sur la joue
+    { video: "videos/clip5a.mp4?v=20261125b", poster: "videos/clip5a.jpg", duree: 1600, vitesse: 1 }, // la main sur la joue
     { src: "photos/16.jpg" },
     { src: "photos/11.jpg" },
     { src: "photos/18.jpg" },
@@ -34,27 +34,27 @@ const CONFIG = {
     { src: "photos/09.jpg" },
     { src: "photos/07.jpg" },
     { src: "photos/10.jpg" },
-    { video: "videos/clip6.mp4?v=20261124n", poster: "videos/clip6.jpg", duree: 2650, vitesse: 1 }, // vidéo du bus, de 17,2 à 19,88 s (sans le flash du déclencheur ni l'écran TikTok)
+    { video: "videos/clip6.mp4?v=20261125b", poster: "videos/clip6.jpg", duree: 2650, vitesse: 1 }, // vidéo du bus, de 17,2 à 19,88 s (sans le flash du déclencheur ni l'écran TikTok)
     { src: "photos/21.jpg" }, // souvenirs en uniforme
     { src: "photos/23.jpg" },
-    { video: "videos/clip2.mp4?v=20261124n", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 }, // sorties et soirées
+    { video: "videos/clip2.mp4?v=20261125b", poster: "videos/clip2.jpg", duree: 1900, vitesse: 2 }, // sorties et soirées
     { src: "photos/28.jpg" },
     { src: "photos/29.jpg" },
-    { video: "videos/clip4.mp4?v=20261124n", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
+    { video: "videos/clip4.mp4?v=20261125b", poster: "videos/clip4.jpg", duree: 2000, vitesse: 2 },
     { src: "photos/30.jpg" }, // « sexy nana »
     { src: "photos/26.jpg" }, // juste avant le « waouh »
-    { video: "videos/clip5b.mp4?v=20261124n", poster: "videos/clip5b.jpg", duree: 1800, vitesse: 1 }, // le « waouh », juste avant la fin
+    { video: "videos/clip5b.mp4?v=20261125b", poster: "videos/clip5b.jpg", duree: 1800, vitesse: 1 }, // le « waouh », juste avant la fin
     { src: "photos/27.jpg" }, // « bref. C'est fini » reste en dernier
   ],
   dureePhoto: 400, // défilement automatique : 0,4 seconde par photo
   dureeDernierePhoto: 1400, // la dernière photo (« bref. C'est fini ») reste un peu plus
 
   // 🎵 Musiques (fichiers dans le dossier "audio/")
-  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261124n", // refrain pendant le défilement des photos
+  musiqueDiaporama: "audio/mode-de-vie-refrain.mp3?v=20261125b", // refrain pendant le défilement des photos
   // Ensuite, sur le reste de la page : ces musiques s'enchaînent, puis recommencent
   musiques: [
-    "audio/musique.mp3?v=20261124n",
-    "audio/parapluie.mp3?v=20261124n",
+    "audio/musique.mp3?v=20261125b",
+    "audio/parapluie.mp3?v=20261125b",
   ],
   textePhoto: "LMA STAR 🤍", // texte écrit sous chaque photo
 
@@ -139,8 +139,8 @@ function startBackgroundPhotos() {
   for (let i = 0; i < 3; i++) setTimeout(spawnFloatingPhoto, i * 1100);
   setInterval(spawnFloatingPhoto, innerWidth < 600 ? 3200 : 2300);
 }
-// Précharge les miniatures pendant le diaporama
-BG_PHOTOS.forEach((src) => { const im = new Image(); im.src = src; });
+// Les miniatures sont préchargées seulement une fois les photos du diaporama prêtes (voir plus bas)
+function preloadBackgroundPhotos() { BG_PHOTOS.forEach((src) => { const im = new Image(); im.src = src; }); }
 
 /* ---------- Confettis (canvas) ---------- */
 const canvas = document.getElementById("confetti");
@@ -214,7 +214,8 @@ function tick() {
    pas faire jouer deux lecteurs, et seul un lecteur « débloqué » par un toucher
    peut ensuite changer de chanson tout seul. */
 const music = new Audio();
-music.preload = "auto";
+// Pas de préchargement automatique : le refrain est téléchargé une seule fois, en priorité (voir plus bas)
+music.preload = "none";
 const playlist = CONFIG.musiques || [];
 let track = 0;
 let userMuted = false;
@@ -225,8 +226,6 @@ const musicBtn = document.getElementById("musicBtn");
 if (CONFIG.musiqueDiaporama || playlist.length) {
   music.src = CONFIG.musiqueDiaporama || playlist[0];
   if (!CONFIG.musiqueDiaporama) { phase = "main"; music.loop = playlist.length === 1; }
-  // Met la 1re musique principale en cache pour un enchaînement sans attente
-  if (CONFIG.musiqueDiaporama && playlist.length) fetch(playlist[0]).catch(() => {});
 }
 
 function setMusicIcon() { musicBtn.textContent = music.paused ? "🔇" : "🔊"; }
@@ -237,17 +236,25 @@ music.addEventListener("pause", setMusicIcon);
 function playIfAllowed() {
   if (userMuted) return setMusicIcon();
   if (document.hidden) { resumeOnReturn = true; return setMusicIcon(); }
-  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => setMusicIcon());
+  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => { musicBtn.hidden = false; setMusicIcon(); });
 }
 
+// Musiques déjà téléchargées et gardées en mémoire (pas de double téléchargement)
+const trackUrls = {};
+function prefetchTrack(i) {
+  if (trackUrls[i] || !playlist[i]) return;
+  trackUrls[i] = "…"; // téléchargement en cours
+  fetchBlobUrl(playlist[i]).then((u) => (trackUrls[i] = u)).catch(() => delete trackUrls[i]);
+}
 function loadTrack(i) {
   track = i % playlist.length;
   music.pause();
-  music.src = playlist[track];
+  const u = trackUrls[track];
+  music.src = u && u !== "…" ? u : playlist[track];
   music.loop = playlist.length === 1;
   music.currentTime = 0;
   // Prépare la suivante pendant que celle-ci joue
-  if (playlist.length > 1) fetch(playlist[(track + 1) % playlist.length]).catch(() => {});
+  if (playlist.length > 1) prefetchTrack((track + 1) % playlist.length);
 }
 
 // Fin d'une musique : on passe à la suivante (et on recommence après la dernière)
@@ -267,7 +274,8 @@ music.addEventListener("error", () => {
 // Doit être appelé pendant le toucher du cadeau (sinon les téléphones bloquent le son)
 function startMusic() {
   if (!music.src) return;
-  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => {});
+  // Même si le lancement échoue, le bouton 🔇 apparaît pour pouvoir réessayer
+  music.play().then(() => { musicBtn.hidden = false; setMusicIcon(); }).catch(() => { musicBtn.hidden = false; setMusicIcon(); });
 }
 
 // À la fin de la dernière photo : le refrain s'arrête et les musiques principales démarrent
@@ -326,10 +334,15 @@ const PLACEHOLDERS = [
   { emoji: "🎂" },
 ];
 
-// Précharge les photos dès l'arrivée sur la page pour qu'elles s'affichent sans délai
+/* ---------- Chargement dans l'ordre ----------
+   Sur une connexion lente, tout télécharger en même temps faisait arriver
+   le refrain et les premières photos trop tard. On charge donc :
+   1) le refrain, 2) les photos et vidéos dans l'ordre du diaporama (2 à la fois),
+   3) seulement ensuite les miniatures du fond et la musique principale. */
+const ready = CONFIG.photos.map(() => false);
 const preloaded = CONFIG.photos.map((ph) => {
   if (ph.video) {
-    // Vidéo préparée à l'avance : sans son, lue dans la page (obligatoire sur iPhone)
+    // Vidéo sans son, lue dans la page (obligatoire sur iPhone)
     const v = document.createElement("video");
     v.muted = true;
     v.defaultMuted = true;
@@ -338,15 +351,83 @@ const preloaded = CONFIG.photos.map((ph) => {
     v.setAttribute("muted", "");
     v.preload = "auto";
     if (ph.poster) v.poster = ph.poster;
-    v.src = ph.video;
-    v.load();
     return v;
   }
   const im = new Image();
   im.decoding = "async";
-  im.src = ph.src;
   return im;
 });
+
+// Télécharge un fichier entier et le garde en mémoire (lecture instantanée ensuite)
+function fetchBlobUrl(url) {
+  return fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.blob(); }).then((b) => URL.createObjectURL(b));
+}
+
+function loadItem(i) {
+  return new Promise((resolve) => {
+    const ph = CONFIG.photos[i];
+    const done = () => { ready[i] = true; updateGate(); resolve(); };
+    if (ph.video) {
+      fetchBlobUrl(ph.video)
+        .then((u) => { preloaded[i].src = u; })
+        .catch(() => { preloaded[i].src = ph.video; }) // repli : lecture directe
+        .finally(done);
+    } else {
+      const im = preloaded[i];
+      im.onload = done;
+      im.onerror = done;
+      im.src = ph.src;
+      if (im.complete) done();
+    }
+  });
+}
+
+let refrainReady = !CONFIG.musiqueDiaporama;
+const PRET_AVANT_CADEAU = Math.min(6, CONFIG.photos.length); // photos prêtes avant d'ouvrir le cadeau
+let giftOpened = false;
+let gateOpen = false;
+const giftBtn = document.getElementById("openGift");
+const hint = document.querySelector(".intro-hint");
+
+function openGate() {
+  if (gateOpen) return;
+  gateOpen = true;
+  giftBtn.disabled = false;
+  giftBtn.classList.add("ready");
+  hint.textContent = "Touche le cadeau";
+}
+function updateGate() {
+  if (gateOpen) return;
+  const n = ready.slice(0, PRET_AVANT_CADEAU).filter(Boolean).length;
+  const pct = Math.round(((n + (refrainReady ? 2 : 0)) / (PRET_AVANT_CADEAU + 2)) * 100);
+  hint.textContent = `Préparation de ta surprise… ${pct} %`;
+  if (refrainReady && n === PRET_AVANT_CADEAU) openGate();
+}
+
+if (CONFIG.photos.length) {
+  giftBtn.disabled = true;
+  updateGate();
+  setTimeout(openGate, 15000); // ne jamais bloquer : au bout de 15 s, on peut ouvrir quand même
+
+  // 1) le refrain d'abord
+  const refrainLoaded = CONFIG.musiqueDiaporama
+    ? fetchBlobUrl(CONFIG.musiqueDiaporama)
+        .then((u) => { if (phase === "intro" && music.paused && !giftOpened) music.src = u; })
+        .catch(() => {})
+        .finally(() => { refrainReady = true; updateGate(); })
+    : Promise.resolve();
+
+  // 2) puis les photos et vidéos dans l'ordre, 2 à la fois
+  refrainLoaded.then(() => {
+    let nextIndex = 0;
+    const worker = () => (nextIndex < CONFIG.photos.length ? loadItem(nextIndex++).then(worker) : Promise.resolve());
+    return Promise.all([worker(), worker()]);
+  }).then(() => {
+    // 3) enfin, ce qui sert après le diaporama
+    preloadBackgroundPhotos();
+    prefetchTrack(0);
+  });
+}
 
 function runSlideshow() {
   const list = CONFIG.photos.length ? CONFIG.photos : PLACEHOLDERS;
@@ -356,10 +437,13 @@ function runSlideshow() {
   const bars = progress.querySelectorAll("span");
 
   slideshow.hidden = false;
-  let i = 0, prev = null;
+  let i = 0, prev = null, waited = 0;
   (function next() {
     if (!main.hidden) return;
     if (i >= list.length) return showMain();
+    // Photo pas encore arrivée (connexion lente) : on attend un peu au lieu d'afficher un cadre vide
+    if (CONFIG.photos.length && !ready[i] && waited < 2500) { waited += 100; return setTimeout(next, 100); }
+    waited = 0;
     const item = list[i];
     const slide = document.createElement("div");
     slide.className = "slide";
@@ -377,8 +461,9 @@ function runSlideshow() {
     } else if (item.src) {
       const im = preloaded[i].cloneNode();
       im.alt = prenom;
+      if (!im.getAttribute("src")) im.src = item.src; // pas encore préchargée : chargement direct
       const fail = () => (img.innerHTML = '<div class="slide-placeholder">🤍</div>');
-      if (preloaded[i].complete && !preloaded[i].naturalWidth) fail();
+      if (ready[i] && preloaded[i].complete && !preloaded[i].naturalWidth) fail();
       else {
         im.onerror = fail;
         // Photo en paysage : affichée en entier sur un fond flouté
@@ -410,7 +495,8 @@ function runSlideshow() {
 }
 
 
-document.getElementById("openGift").addEventListener("click", (e) => {
+giftBtn.addEventListener("click", (e) => {
+  giftOpened = true;
   e.currentTarget.disabled = true; // évite de lancer le diaporama deux fois
   startMusic();
   burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 90);
